@@ -35,7 +35,7 @@ public class VM {
         WASMModule webAssembly = context.getPolyglotBindings().getMember("WebAssembly")
                 .as(WASMModule.class);
         Value mainModule = webAssembly.module_decode(policy);
-        this.memory = webAssembly.mem_alloc(minMemory, maxMemory);
+        this.memory = webAssembly.mem_alloc(this.minMemory, this.maxMemory);
         OPABindings bindings = new OPABindings(this.memory);
         this.wasm = webAssembly.module_instantiate(mainModule, Value.asValue(bindings)).as(OPAExports.class);
         this.baseHeapPtr = this.wasm.opa_heap_ptr_get();

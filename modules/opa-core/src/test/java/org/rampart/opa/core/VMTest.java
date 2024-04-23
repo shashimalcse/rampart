@@ -10,15 +10,29 @@ import static org.junit.jupiter.api.Assertions.*;
 public class VMTest {
 
     @Test
-    public void initVM() throws Exception {
+    public void validInputEvaluate() throws Exception {
+
         String input = "{\"user\": \"john\"}";
         String data = "{\"role\":{\"john\":\"admin\"}}";
         byte[] wasm = loadWasm();
         byte[] stringBytes = data.getBytes();
         var vm = new VM(wasm, stringBytes, 108,1000);
         byte[] inputBytes = input.getBytes();
-        vm.eval(inputBytes);
-        assertNotNull(vm);
+        String response = vm.eval(inputBytes);
+        assertEquals("[{\"result\":true}]", response);
+    }
+
+    @Test
+    public void invalidInputEvaluate() throws Exception {
+
+        String input = "{\"user\": \"john\"}";
+        String data = "{\"role\":{\"john\":\"manager\"}}";
+        byte[] wasm = loadWasm();
+        byte[] stringBytes = data.getBytes();
+        var vm = new VM(wasm, stringBytes, 108,1000);
+        byte[] inputBytes = input.getBytes();
+        String response = vm.eval(inputBytes);
+        assertEquals("[{\"result\":false}]", response);
     }
 
     private static byte[] loadWasm() throws IOException {

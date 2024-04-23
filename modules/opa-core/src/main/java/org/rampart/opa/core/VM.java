@@ -35,29 +35,37 @@ public class VM {
         WASMModule webAssembly = context.getPolyglotBindings().getMember("WebAssembly")
                 .as(WASMModule.class);
         Value mainModule = webAssembly.module_decode(policy);
-        memory = webAssembly.mem_alloc(minMemory, maxMemory);
-        OPABindings bindings = new OPABindings(memory);
-        wasm = webAssembly.module_instantiate(mainModule, Value.asValue(bindings)).as(OPAExports.class);
-        baseHeapPtr = wasm.opa_heap_ptr_get();
+        this.memory = webAssembly.mem_alloc(minMemory, maxMemory);
+        OPABindings bindings = new OPABindings(this.memory);
+        this.wasm = webAssembly.module_instantiate(mainModule, Value.asValue(bindings)).as(OPAExports.class);
+        this.baseHeapPtr = this.wasm.opa_heap_ptr_get();
         if (data != null) {
             setData(data);
         }
     }
 
-    public void eval(byte[] input) {
+    public String eval(byte[] input) {
 
         int inputAddr = setInput(input);
         int ctxAddr = this.wasm.opa_eval_ctx_new();
         this.wasm.opa_eval_ctx_set_input(ctxAddr, inputAddr);
         this.wasm.opa_eval_ctx_set_data(ctxAddr, this.dataAddr);
         wasm.eval(ctxAddr);
-        int result = wasm.opa_eval_ctx_get_result(ctxAddr);
-        int dumpjson = wasm.opa_json_dump(result);
-        byte[] result2 = new byte[1000];
-        for(int i = 0; i < 1000; i++) {
-            result2[i] = memory.readBufferByte(dumpjson + i);
+        int opaResult = wasm.opa_eval_ctx_get_result(ctxAddr);
+        int addr = wasm.opa_json_dump(opaResult);
+        int end = addr;
+        while (memory.readBufferByte(end) != 0) {
+            end++;
         }
-        System.out.println("Result: " + new String(result2));
+        int resultSize = end - addr;
+        if (resultSize == 0) {
+            return "";
+        }
+        byte[] result = new byte[resultSize];
+        for(int i = 0; i < resultSize; i++) {
+            result[i] = memory.readBufferByte(addr + i);
+        }
+        return new String(result);
     }
 
     private void setData(byte[] data) {

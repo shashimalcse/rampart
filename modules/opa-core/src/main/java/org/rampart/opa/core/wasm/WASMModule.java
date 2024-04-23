@@ -1,4 +1,4 @@
-package org.rampart.opa.core;
+package org.rampart.opa.core.wasm;
 
 import org.graalvm.polyglot.Value;
 
@@ -7,6 +7,7 @@ import org.graalvm.polyglot.Value;
  * See <a href="https://github.com/oracle/graal/blob/master/wasm/src/org.graalvm.wasm/src/org/graalvm/wasm/api/WebAssembly.java">WebAssembly source</a>
  */
 public interface WASMModule {
+
     /**
      * Loads WASM module from bytes
      * @param src source

@@ -11,6 +11,7 @@
     <modules>
         <module>modules/opa-core</module>
         <module>modules/opa-samples/attribute-based-access-control</module>
+        <module>modules/rampart-core</module>
     </modules>
 
     <properties>

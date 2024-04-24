@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/modules/opa-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules/opa-samples/attribute-based-access-control/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modules/opa-samples/attribute-based-access-control/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/rampart-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/rampart-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

@@ -30,3 +30,8 @@ public class Main {
 ### Contributing
 Work in Progress -- Contributions are welcome! 
 
+### Notes
+
+- Inspired by : https://github.com/open-policy-agent/golang-opa-wasm
+- Thanks for this awesome project that demonstrates GraalVM WASM capabilities: https://github.com/stepstone-tech/doom-graalvm.
+

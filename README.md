@@ -1,5 +1,5 @@
 ## Open Policy Agent (OPA) JAVA Library
-Open Policy Agent (OPA) WebAssembly JAVA library for execute WebAssembly (wasm) compiled Open Policy Agent Rego policies.
+JAVA library for execute WebAssembly (wasm) compiled Open Policy Agent Rego policies.
 
 ### Examples
 

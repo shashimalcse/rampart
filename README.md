@@ -28,5 +28,5 @@ public class Main {
 #### Check the [attribute-based access control sample](https://github.com/shashimalcse/rampart/tree/main/modules/opa-samples/attribute-based-access-control) 
 
 ### Contributing
-Work in Progress -- Contributions to the OPA WebAssembly JAVA SDK are welcome! 
+Work in Progress -- Contributions are welcome! 
 

@@ -1,5 +1,5 @@
-## Open Policy Agent (OPA) WebAssemby JAVA SDK
-This is the source for the Open Policy Agent WebAssembly JAVA SDK which is a small JAVA library for using WebAssembly (wasm) compiled Open Policy Agent Rego policies.
+## Open Policy Agent (OPA) JAVA SDK
+Open Policy Agent (OPA) WebAssembly JAVA library for execute WebAssembly (wasm) compiled Open Policy Agent Rego policies.
 
 ### Examples
 

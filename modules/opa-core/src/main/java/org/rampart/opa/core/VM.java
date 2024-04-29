@@ -22,6 +22,8 @@ public class VM {
 
     private OPAExports wasm;
     private Context context;
+    WASMModule webAssembly;
+    OPABindings bindings;
 
 
     public VM(byte[] policy, byte[] data, int minMemory, int maxMemory) {
@@ -32,16 +34,28 @@ public class VM {
         this.data = data;
         this.context = Context.newBuilder().allowAllAccess(true).build();
         this.context.initialize("wasm");
-        WASMModule webAssembly = context.getPolyglotBindings().getMember("WebAssembly")
+        this.webAssembly = context.getPolyglotBindings().getMember("WebAssembly")
                 .as(WASMModule.class);
-        Value mainModule = webAssembly.module_decode(policy);
-        this.memory = webAssembly.mem_alloc(this.minMemory, this.maxMemory);
-        OPABindings bindings = new OPABindings(this.memory);
-        this.wasm = webAssembly.module_instantiate(mainModule, Value.asValue(bindings)).as(OPAExports.class);
+        Value mainModule = this.webAssembly.module_decode(this.policy);
+        this.memory = this.webAssembly.mem_alloc(this.minMemory, this.maxMemory);
+        this.bindings = new OPABindings(this.memory);
+        this.wasm = this.webAssembly.module_instantiate(mainModule, Value.asValue(bindings)).as(OPAExports.class);
         this.baseHeapPtr = this.wasm.opa_heap_ptr_get();
         if (data != null) {
             setData(data);
         }
+    }
+
+    public VM(int minMemory, int maxMemory) {
+
+        this.minMemory = minMemory;
+        this.maxMemory = maxMemory;
+        this.context = Context.newBuilder().allowAllAccess(true).build();
+        this.context.initialize("wasm");
+        this.webAssembly = context.getPolyglotBindings().getMember("WebAssembly")
+                .as(WASMModule.class);
+        this.memory = this.webAssembly.mem_alloc(this.minMemory, this.maxMemory);
+        this.bindings = new OPABindings(this.memory);
     }
 
     public String eval(byte[] input) {
@@ -68,7 +82,14 @@ public class VM {
         return new String(result);
     }
 
-    private void setData(byte[] data) {
+    public void setPolicy(byte[] policy) {
+
+        Value mainModule = this.webAssembly.module_decode(this.policy);
+        this.wasm = this.webAssembly.module_instantiate(mainModule, Value.asValue(this.bindings)).as(OPAExports.class);
+        this.baseHeapPtr = this.wasm.opa_heap_ptr_get();
+    }
+
+    public void setData(byte[] data) {
 
         this.wasm.opa_heap_ptr_set(baseHeapPtr);
         int addr = writeBytes(data);

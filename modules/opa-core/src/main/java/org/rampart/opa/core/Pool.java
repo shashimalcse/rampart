@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class Pool {
 
-    private BlockingQueue<VM> pool;
+    private final BlockingQueue<VM> pool;
 
     public Pool(int poolSize, int minMemory, int maxMemory) {
 
@@ -20,7 +20,9 @@ public class Pool {
     }
 
     public void release(VM vm) {
-        pool.offer(vm);
+        if (vm != null && !pool.offer(vm)) { // Check if the pool is full
+            System.out.println("Attempted to release a VM to a full pool.");
+        }
     }
 
 

@@ -23,6 +23,20 @@ public class VMTest {
     }
 
     @Test
+    public void validInputEvaluateWithPool() throws Exception {
+
+        String input = "{\"user\": \"john\"}";
+        String data = "{\"role\":{\"john\":\"admin\"}}";
+        byte[] wasm = loadWasm();
+        byte[] stringBytes = data.getBytes();
+        var opa = new OPA(108,1000, 5);
+        opa.setPolicyData(wasm, stringBytes);
+        byte[] inputBytes = input.getBytes();
+        String response = opa.eval(inputBytes);
+        assertEquals("[{\"result\":true}]", response);
+    }
+
+    @Test
     public void invalidInputEvaluate() throws Exception {
 
         String input = "{\"user\": \"john\"}";

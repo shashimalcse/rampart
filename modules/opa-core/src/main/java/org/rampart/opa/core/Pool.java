@@ -25,5 +25,17 @@ public class Pool {
         }
     }
 
+    public void setPolicyData(byte[] policy, byte[] data) {
+        for (VM vm : pool) {
+            vm.setPolicy(policy);
+            vm.setData(data);
+            release(vm);
+        }
+    }
 
+    public void close() {
+        for (VM vm : pool) {
+            vm.close();
+        }
+    }
 }

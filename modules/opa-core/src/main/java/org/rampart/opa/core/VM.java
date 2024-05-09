@@ -12,8 +12,8 @@ public class VM {
 
     private byte[] policy;
     private byte[] data;
-    private int minMemory;
-    private int maxMemory;
+    private final int minMemory;
+    private final int maxMemory;
     private int dataAddr;
     private int baseHeapPtr;
     private int dataHeapPtr;
@@ -41,8 +41,8 @@ public class VM {
         this.bindings = new OPABindings(this.memory);
         this.wasm = this.webAssembly.module_instantiate(mainModule, Value.asValue(bindings)).as(OPAExports.class);
         this.baseHeapPtr = this.wasm.opa_heap_ptr_get();
-        if (data != null) {
-            setData(data);
+        if (this.data != null) {
+            setData(this.data);
         }
     }
 
@@ -84,7 +84,7 @@ public class VM {
 
     public void setPolicy(byte[] policy) {
 
-        Value mainModule = this.webAssembly.module_decode(this.policy);
+        Value mainModule = this.webAssembly.module_decode(policy);
         this.wasm = this.webAssembly.module_instantiate(mainModule, Value.asValue(this.bindings)).as(OPAExports.class);
         this.baseHeapPtr = this.wasm.opa_heap_ptr_get();
     }
@@ -113,5 +113,10 @@ public class VM {
             this.memory.writeBufferByte(addr + i, bytes[i]);
         }
         return addr;
+    }
+
+    public void close() {
+
+        this.context.close();
     }
 }
